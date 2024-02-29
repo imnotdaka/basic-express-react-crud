@@ -3,22 +3,26 @@ import { getTasks } from "./task";
 import { FaEdit } from "react-icons/fa";
 import { GiBombingRun } from "react-icons/gi";
 import "./index.css";
+import { useEffect, useState } from "react";
 
 export function TaskList() {
 
   const navigate = useNavigate();
-  const tasks = getTasks();
+  const [tasks, setTasks] = useState<TaskItem[]>([])
 
-  if (tasks.length === 0) {
-    return (
-      <div>
-        <h1>It's fucking empty, u moron</h1>
-        <p>
-          <a href="/add">Click here to create your first task</a>
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const fetchedTasks = await getTasks()
+        setTasks(fetchedTasks)
+      } catch (error){
+        console.error("Error fetching:", error)
+      }
+    }
+    fetchTasks
+  }, [])
+  console.log("TaskList variable: ", tasks)
+
 
   return (
     <ul>

@@ -6,7 +6,9 @@ let dbInitialized = false;
 async function initDataBase() {
   await new Promise((resolve) => {
     db.serialize(() => {
-      db.run("CREATE TABLE tasks (id INT, title TEXT, description TEXT)");
+      // Create table if not exists to initialize DB with sqlite
+      
+      db.run("CREATE TABLE IF NOT EXISTS tasks(id INT, title TEXT, description TEXT)");
       const stmt = db.prepare(
         "INSERT INTO tasks (id, title, description) VALUES (?, ?, ?)",
       );

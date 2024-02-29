@@ -1,22 +1,17 @@
-import { useEffect, useState } from "react";
-
-const STORAGE_KEY = "tasks";
-
-export function addTask(title: string, description: string) {
-  const tasks = getTasks();
+export async function addTask(title: string, description: string) {
+  const tasks = await getTasks();
 
   const newTask: TaskItem = {
     id: crypto.randomUUID(),
     title,
     description,
   };
-
   tasks.push(newTask);
-  saveTasks(tasks);
+  console.log(saveTasks(tasks));
 }
 
-export function updateTask(id: string, title: string, description: string) {
-  const tasks = getTasks();
+export async function updateTask(id: string, title: string, description: string) {
+  const tasks = await getTasks();
 
   const taskItem = tasks.find((e) => e.id == id);
   if (taskItem == null) return;
@@ -26,40 +21,36 @@ export function updateTask(id: string, title: string, description: string) {
   saveTasks(tasks);
 }
 
-export function getTasks(): TaskItem[] {
-  const [todos, setTodos] = useState([])
+export async function fetchApi<T = unknown>(path: string){
+  return await new Promise<T>((resolve, reject) => {
+    const url = new URL(path, 'http://localhost:3000');
+    fetch(url.toString())
+    .then(res => res.json())
+    .then(data => resolve(data))
+    .catch(reject)
+  })
 
-  useEffect(() => {
-    getTodos()
-
-    console.log(todos)
-  }, [])
-
-  const getTodos = () => {
-    fetch("http://localhost:3000")
-      .then(res => res.json())
-      .then(data => setTodos(data))
-      .catch(err => console.error(err))
-  }
-
-  const t = localStorage.getItem(STORAGE_KEY);
-  if (t == null) {
-    return [];
-  }
-
-  try {
-    return JSON.parse(t);
-  } catch (error) {
-    return [];
-  }
+} 
+  
+export async function getTasks(): Promise<TaskItem[]> {
+  console.log("succesfully fetched")
+  return fetchApi<TaskItem[]>('/')
 }
 
-function saveTasks(tasks: TaskItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+async function saveTasks<T = unknown>(task: TaskItem[]) {
+  return await new Promise<T>((resolve, reject) => {
+    fetch("http://localhost:3000/create", {
+      method: "POST",
+      body: JSON.stringify(task)
+    })
+    .then(res => res.json())
+    .then(data => resolve(data))
+    .catch(reject)
+  })
 }
 
-export function deleteTask(itemid: string) {
-  const tasks = getTasks();
+export async function deleteTask(itemid: string) {
+  const tasks = await getTasks();
 
   const newTaskList = tasks.filter((task) => task.id != itemid);
   saveTasks(newTaskList);

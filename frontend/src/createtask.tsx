@@ -9,17 +9,24 @@ export function CreateTask() {
 
   const { itemid } = useParams();
   useEffect(() => {
-    if (itemid == null) return;
-    const t = getTasks();
-    const taskItem = t.find((e) => e.id == itemid);
-    if (taskItem == null) return;
+    const setTasks = async () => {
+      // If task ITEMID == NULL quit function
+      if (itemid == null) return;
+      const t = await getTasks();
+      const taskItem = t.find((e) => e.id == itemid);
+      // If task ITEMID exists quit function
+      if (taskItem == null) return;
+      setTitle(taskItem.title);
+      setDescription(taskItem.description);
+    }
 
-    setTitle(taskItem.title);
-    setDescription(taskItem.description);
+    setTasks()
   }, [itemid]);
 
   function addNewTask() {
+    // If task don't exist, run addTask function
     if (itemid == null) addTask(title, description);
+    // If task exists, run updateTask function
     else updateTask(itemid, title, description);
     navigate("/");
   }

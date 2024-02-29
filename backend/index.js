@@ -8,12 +8,13 @@ const app = express();
 const port = 3000;
 
 app.use(cors({
-  origin: 'http://localhost:5173/', // Cambia esto por tu dominio
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'] // Encabezados permitidos
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express());
 
+// ROUTES
 app.get("/", getAllTasks);
 app.post("/create", createNewTask);
 app.delete("/delete/:id", deleteTask);

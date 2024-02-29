@@ -8,7 +8,7 @@ function App() {
     <Routes>
       <Route path="/">
         <Route index element={<TaskList />} />
-        <Route path="add" element={<CreateTask />} />
+        <Route path="create" element={<CreateTask />} />
         <Route path="edit/:itemid" element={<CreateTask />} />
         <Route path="delete/:itemid" element={<DeleteTask />} />
       </Route>
