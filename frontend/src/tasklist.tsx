@@ -21,7 +21,6 @@ export function TaskList() {
     }
     fetchTasks
   }, [])
-  console.log("TaskList variable: ", tasks)
 
 
   return (

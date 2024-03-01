@@ -7,7 +7,7 @@ export async function addTask(title: string, description: string) {
     description,
   };
   tasks.push(newTask);
-  console.log(saveTasks(tasks));
+  saveTasks(tasks);
 }
 
 export async function updateTask(id: string, title: string, description: string) {
@@ -33,13 +33,17 @@ export async function fetchApi<T = unknown>(path: string){
 } 
   
 export async function getTasks(): Promise<TaskItem[]> {
-  console.log("succesfully fetched")
   return fetchApi<TaskItem[]>('/')
 }
 
 async function saveTasks<T = unknown>(task: TaskItem[]) {
+  console.log("Saving tasks", task)
   return await new Promise<T>((resolve, reject) => {
+
     fetch("http://localhost:3000/create", {
+      headers:{
+        'Content-Type': 'application/json'
+      },
       method: "POST",
       body: JSON.stringify(task)
     })
