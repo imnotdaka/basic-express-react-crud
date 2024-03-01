@@ -1,4 +1,5 @@
 const express = require("express");
+var morgan = require('morgan');
 const { getAllTasks } = require("./routes/getAllTasks");
 const { createNewTask } = require("./routes/createnewtask");
 const { deleteTask } = require("./routes/deletetask");
@@ -7,11 +8,13 @@ const cors = require("cors")
 const app = express();
 const port = 3000;
 
+app.use(morgan('tiny'))
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.use(express.json())
 app.use(express());
 
 // ROUTES
