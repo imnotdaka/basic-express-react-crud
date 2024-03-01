@@ -14,12 +14,16 @@ export function TaskList() {
     const fetchTasks = async () => {
       try {
         const fetchedTasks = await getTasks()
+
+        console.log("fetchedTasks", fetchedTasks)
         setTasks(fetchedTasks)
+
+        console.log("tasks after fetch", tasks)
       } catch (error){
         console.error("Error fetching:", error)
       }
     }
-    fetchTasks
+    fetchTasks()
   }, [])
 
 

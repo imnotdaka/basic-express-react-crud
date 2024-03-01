@@ -5,6 +5,7 @@ async function deleteTask(req, res) {
   await new Promise((resolve) => {
     db.serialize(() => {
       const stmt = db.prepare("DELETE FROM tasks WHERE id = ?");
+      console.log(req.params.id)
       stmt.run(req.params.id);
       stmt.finalize(resolve);
     });

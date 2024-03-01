@@ -1,13 +1,13 @@
 export async function addTask(title: string, description: string) {
-  const tasks = await getTasks();
+  const taskReady = []
 
   const newTask: TaskItem = {
     id: crypto.randomUUID(),
     title,
     description,
   };
-  tasks.push(newTask);
-  saveTasks(tasks);
+  taskReady.push(newTask);
+  saveTasks(taskReady);
 }
 
 export async function updateTask(id: string, title: string, description: string) {
@@ -53,9 +53,19 @@ async function saveTasks<T = unknown>(task: TaskItem[]) {
   })
 }
 
-export async function deleteTask(itemid: string) {
-  const tasks = await getTasks();
+export async function deleteTask<T = unknown>(taskId: string){
+  console.log("deleting tasks", taskId)
+  return await new Promise<T>((resolve, reject) => {
 
-  const newTaskList = tasks.filter((task) => task.id != itemid);
-  saveTasks(newTaskList);
+    fetch(`http://localhost:3000/delete/` + taskId , {
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      method: "DELETE",
+      body: JSON.stringify({id: taskId})
+    })
+    .then(res => res.json())
+    .then(data => resolve(data))
+    .catch(reject)
+  })
 }
