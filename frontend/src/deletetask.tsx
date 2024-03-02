@@ -4,9 +4,9 @@ import { deleteTask } from "./task";
 export function DeleteTask() {
   const navigate = useNavigate();
   const { itemid } = useParams();
-  function deleteT() {
+  async function deleteT() {
     console.log(`itemid: ${itemid}`)
-    deleteTask(itemid!);
+    await deleteTask(itemid!);
     navigate("/");
   }
 
