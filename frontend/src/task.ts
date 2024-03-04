@@ -26,7 +26,6 @@ export async function getTasks(): Promise<TaskItem[]> {
 }
 
 async function saveTasks<T = unknown>(task: TaskItem) {
-  console.log("Saving tasks", task)
   return await new Promise<T>((resolve, reject) => {
 
     fetch("http://localhost:3000/create", {
@@ -48,7 +47,6 @@ export async function updateTask<T = unknown>(id: string, title: string, descrip
     title,
     description
   }
-  console.log("updating task", task)
   return await new Promise<T>((resolve, reject) => {
 
     fetch("http://localhost:3000/update", {
@@ -65,7 +63,6 @@ export async function updateTask<T = unknown>(id: string, title: string, descrip
 }
 
 export async function deleteTask<T = unknown>(taskId: string){
-  console.log("deleting tasks", taskId)
   return await new Promise<T>((resolve, reject) => {
 
     fetch(`http://localhost:3000/delete/` + taskId , {

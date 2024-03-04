@@ -24,15 +24,14 @@ export function CreateTask() {
     setTasks()
   }, [itemid]);
 
-  function addNewTask() {
+  async function addNewTask() {
     // If task don't exist, run addTask function
     if (itemid == null) addTask(title, description);
     // If task exists, run updateTask function
-    else updateTask(itemid, title, description);
+    else await updateTask(itemid, title, description);
     navigate("/");
   }
   
-
   return (
     <div
       style={{

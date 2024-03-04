@@ -12,7 +12,6 @@ async function initDataBase() {
       const stmt = db.prepare(
         "INSERT INTO tasks (id, title, description) VALUES (?, ?, ?)",
       );
-      stmt.run("738bd046-04f1-4d6b-aa90-c42ccde08161", "React", "Learn react");
       stmt.finalize(resolve);
     });
   });

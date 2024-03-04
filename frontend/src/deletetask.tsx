@@ -5,7 +5,6 @@ export function DeleteTask() {
   const navigate = useNavigate();
   const { itemid } = useParams();
   async function deleteT() {
-    console.log(`itemid: ${itemid}`)
     await deleteTask(itemid!);
     navigate("/");
   }
