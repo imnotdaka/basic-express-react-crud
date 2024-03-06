@@ -1,18 +1,9 @@
-const { getDataBase } = require("../sqlite-db");
+const Task = require("../models/task.model")
 
 async function deleteTask(req, res) {
-  const db = await getDataBase();
-  await new Promise((resolve) => {
-    db.serialize(() => {
-      const stmt = db.prepare("DELETE FROM tasks WHERE id = ?");
-      console.log(req.params.id)
-      stmt.run(req.params.id);
-      stmt.finalize(resolve);
-    });
-  });
-  res.json({
-    DELETED: "succesfully deleted",
-  });
+  const task = await Task.findByIdAndDelete(req.params.id)
+  if (!task) return res.status(404).json({message: "Task not found"})
+  res.json(task)
 }
 
 exports.deleteTask = deleteTask;

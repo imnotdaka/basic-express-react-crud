@@ -1,10 +1,12 @@
 export async function addTask(title: string, description: string) {
 
+
   const newTask: TaskItem = {
-    id: crypto.randomUUID(),
     title,
     description,
   };
+  if (newTask.title.length == 0) { newTask.title= "default title" }
+  if (newTask.description.length == 0) { newTask.description= "default description" }
 
   await saveTasks(newTask);
 }
@@ -41,15 +43,15 @@ async function saveTasks<T = unknown>(task: TaskItem) {
   })
 }
 
-export async function updateTask<T = unknown>(id: string, title: string, description: string) {
+export async function updateTask<T = unknown>(_id: string, title: string, description: string) {
   const task: TaskItem = {
-    id,
+    _id,
     title,
     description
   }
   return await new Promise<T>((resolve, reject) => {
 
-    fetch("http://localhost:3000/update", {
+    fetch("http://localhost:3000/update/" + _id, {
       headers:{
         'Content-Type': 'application/json'
       },
@@ -62,15 +64,15 @@ export async function updateTask<T = unknown>(id: string, title: string, descrip
   })
 }
 
-export async function deleteTask<T = unknown>(taskId: string){
+export async function deleteTask<T = unknown>(_id: string){
   return await new Promise<T>((resolve, reject) => {
 
-    fetch(`http://localhost:3000/delete/` + taskId , {
+    fetch(`http://localhost:3000/delete/` + _id , {
       headers:{
         'Content-Type': 'application/json'
       },
       method: "DELETE",
-      body: JSON.stringify({id: taskId})
+      body: JSON.stringify({_id: _id})
     })
     .then(res => res.json())
     .then(data => resolve(data))

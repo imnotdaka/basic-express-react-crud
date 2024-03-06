@@ -4,6 +4,7 @@ const { getAllTasks } = require("./routes/getAllTasks");
 const { createNewTask } = require("./routes/createnewtask");
 const { deleteTask } = require("./routes/deletetask");
 const { updateTask } = require("./routes/updatetask");
+const { initDatabase } = require("./db")
 const cors = require("cors")
 const app = express();
 const port = 3000;
@@ -16,12 +17,12 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use(express());
-
+initDatabase()
 // ROUTES
 app.get("/", getAllTasks);
 app.post("/create", createNewTask);
 app.delete("/delete/:id", deleteTask);
-app.put("/update", updateTask);
+app.put("/update/:id", updateTask);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

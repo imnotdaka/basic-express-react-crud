@@ -39,17 +39,17 @@ export function TaskList() {
             <CreateTaskButton />
             <ul>
               {tasks.map((item) => (
-                <div key={item.id} className="border-gray-300">
+                <div key={item._id} className="border-gray-300">
                   <li>
                     <h3>{item.title}</h3>
                   </li>
                   <li>{item.description}</li>
-                  <button onClick={() => navigate(`./update/${item.id}`)}>
+                  <button onClick={() => navigate(`./update/${item._id}`)}>
                     <FaEdit />
                   </button>
                   <button
                     style={{ backgroundColor: "#ee0000" }}
-                    onClick={() => navigate(`./delete/${item.id}`)}
+                    onClick={() => navigate(`./delete/${item._id}`)}
                   >
                     <GiBombingRun />
                   </button>

@@ -14,7 +14,7 @@ export function CreateTask() {
       // If task ITEMID == NULL quit function
       if (itemid == null) return;
       const t = await getTasks();
-      const taskItem = t.find((e) => e.id == itemid);
+      const taskItem = t.find((e) => e._id == itemid);
       // If task ITEMID exists quit function
       if (taskItem == null) return;
       setTitle(taskItem.title);
@@ -26,7 +26,7 @@ export function CreateTask() {
 
   async function addNewTask() {
     // If task don't exist, run addTask function
-    if (itemid == null) addTask(title, description);
+    if (itemid == null) await addTask(title, description);
     // If task exists, run updateTask function
     else await updateTask(itemid, title, description);
     navigate("/");
