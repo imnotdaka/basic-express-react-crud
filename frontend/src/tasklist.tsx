@@ -3,33 +3,23 @@ import { getTasks } from "./task";
 import { FaEdit } from "react-icons/fa";
 import { GiBombingRun } from "react-icons/gi";
 import "./index.css";
-import { useEffect, useState } from "react";
 import Loading from "./Loading";
 import { CreateTaskButton } from "./createTaskButton";
+import { useQuery } from "@tanstack/react-query";
 
 export function TaskList() {
 
   const navigate = useNavigate();
-  const [tasks, setTasks] = useState<TaskItem[]>([])
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const fetchedTasks = await getTasks()
-        setTasks(fetchedTasks)
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching:", error)
-      }
-    }
-    fetchTasks()
-  }, [])
+  const { isLoading, data, isError, error} = useQuery({
+    queryKey: ["tasks"],
+    queryFn: getTasks
+  })
 
-  if (!isLoading) {
+  if (!isLoading && !isError) {
     return (
       <div>
-        {tasks.length == 0 ? (
+        {data!.length == 0 ? (
           <div>
             <p>It's empty u mongoloid</p>
             <CreateTaskButton />
@@ -38,7 +28,7 @@ export function TaskList() {
           <div>
             <CreateTaskButton />
             <ul>
-              {tasks.map((item) => (
+              {data!.map((item) => (
                 <div key={item._id} className="border-gray-300">
                   <li>
                     <h3>{item.title}</h3>
@@ -60,7 +50,11 @@ export function TaskList() {
         )}
       </div>
     );
-  } else return (
+  } else if (isError) 
+  {
+    console.error(error)
+  }
+  else return (
     <div>
       <p>Loading...</p>
       <Loading />

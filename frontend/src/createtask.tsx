@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTasks, addTask, updateTask } from "./task";
+import { addTask, updateTask, getSingleTask } from "./task";
 import { useNavigate, useParams } from "react-router-dom";
 
 export function CreateTask() {
@@ -9,16 +9,14 @@ export function CreateTask() {
 
   const { itemid } = useParams();
 
+  // useEffect for title and description to have the original data when updating
   useEffect(() => {
     const setTasks = async () => {
       // If task ITEMID == NULL quit function
       if (itemid == null) return;
-      const t = await getTasks();
-      const taskItem = t.find((e) => e._id == itemid);
-      // If task ITEMID exists quit function
-      if (taskItem == null) return;
-      setTitle(taskItem.title);
-      setDescription(taskItem.description);
+      const t = await getSingleTask(itemid);
+      setTitle(t.title);
+      setDescription(t.description);
     }
 
     setTasks()
@@ -26,7 +24,9 @@ export function CreateTask() {
 
   async function addNewTask() {
     // If task don't exist, run addTask function
-    if (itemid == null) await addTask(title, description);
+    if (itemid == null) {
+      await addTask(title, description)
+    }
     // If task exists, run updateTask function
     else await updateTask(itemid, title, description);
     navigate("/");

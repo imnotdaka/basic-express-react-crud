@@ -1,5 +1,6 @@
-export async function addTask(title: string, description: string) {
+import axios from "axios"
 
+export async function addTask(title: string, description: string) {
 
   const newTask: TaskItem = {
     title,
@@ -12,70 +13,37 @@ export async function addTask(title: string, description: string) {
 }
 
 
-export async function fetchApi<T = unknown>(path: string){
-  return await new Promise<T>((resolve, reject) => {
-    const url = new URL(path, 'http://localhost:3000');
-    fetch(url.toString())
-    .then(res => res.json())
-    .then(data => resolve(data))
-    .catch(reject)
-  })
+export async function fetchApi(){
+  const res = await axios.get("http://localhost:3000")
+  return res.data
 
 } 
   
 export async function getTasks(): Promise<TaskItem[]> {
-  return fetchApi<TaskItem[]>('/')
+  return fetchApi()
 }
 
-async function saveTasks<T = unknown>(task: TaskItem) {
-  return await new Promise<T>((resolve, reject) => {
-
-    fetch("http://localhost:3000/create", {
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      method: "POST",
-      body: JSON.stringify(task)
-    })
-    .then(res => res.json())
-    .then(data => resolve(data))
-    .catch(reject)
-  })
+export async function getSingleTask(_id: string) {
+  const res = await axios.get("http://localhost:3000/" + _id)
+  return res.data
 }
 
-export async function updateTask<T = unknown>(_id: string, title: string, description: string) {
+async function saveTasks(task: TaskItem) {
+  const res = await axios.post("http://localhost:3000/create", task)
+  return res.data
+}
+
+export async function updateTask(_id: string, title: string, description: string) {
   const task: TaskItem = {
     _id,
     title,
     description
   }
-  return await new Promise<T>((resolve, reject) => {
-
-    fetch("http://localhost:3000/update/" + _id, {
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      method: "PUT",
-      body: JSON.stringify(task)
-    })
-    .then(res => res.json())
-    .then(data => resolve(data))
-    .catch(reject)
-  })
+  const res = await axios.put("http://localhost:3000/update/" + _id, task)
+  return res.data
 }
 
-export async function deleteTask<T = unknown>(_id: string){
-  return await new Promise<T>((resolve, reject) => {
-
-    fetch(`http://localhost:3000/delete/` + _id , {
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      method: "DELETE",
-      body: JSON.stringify({_id: _id})
-    })
-    .then(res => res.json())
-    .then(data => resolve(data))
-    .catch(reject)
-  })
+export async function deleteTask(_id: string){
+  const res = await axios.delete("http://localhost:3000/delete/" + _id)
+  return res.data
 }

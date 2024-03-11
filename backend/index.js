@@ -1,6 +1,7 @@
 const express = require("express");
 var morgan = require('morgan');
 const { getAllTasks } = require("./routes/getAllTasks");
+const { getTask } = require("./routes/getTask")
 const { createNewTask } = require("./routes/createnewtask");
 const { deleteTask } = require("./routes/deletetask");
 const { updateTask } = require("./routes/updatetask");
@@ -20,6 +21,7 @@ app.use(express());
 initDatabase()
 // ROUTES
 app.get("/", getAllTasks);
+app.get("/:id", getTask);
 app.post("/create", createNewTask);
 app.delete("/delete/:id", deleteTask);
 app.put("/update/:id", updateTask);
